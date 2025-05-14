@@ -19,4 +19,4 @@ node_modules
 README.md
 
 #Postgres database files
-.vscode
+.vscode/
