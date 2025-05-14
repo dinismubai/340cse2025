@@ -17,3 +17,6 @@ node_modules
 
 #README file
 README.md
+
+#Postgres database files
+.vscode
