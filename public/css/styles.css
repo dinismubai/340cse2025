@@ -278,6 +278,11 @@ strong{
   color: #050A30;
 }
 
+#error-trigger{
+  font-size: 30px;
+  color:crimson
+}
+
 /******************************************************************LARGE SCREENS*************************************************************/
 @media screen and (min-width: 768px) {
   body {
