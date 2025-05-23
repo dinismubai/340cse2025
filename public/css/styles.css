@@ -66,21 +66,21 @@ nav ul {
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif; 
 }
 
-nav ul li {
+nav ul li a{
   padding: 10px 10px;
   color: white;
   font-size: 20px;
   cursor: pointer;
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  text-decoration: none;
 }
 
-/*Test nav*/
+a{
+  text-decoration: none;
+}
 
 
-
-
-
-nav ul li:hover {
+nav ul li a:hover {
   background-color: #000C66;
 }
 
@@ -96,6 +96,7 @@ main {
 
 h1 {
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  color: #000C66;
 }
 
 #welcome {
@@ -224,6 +225,58 @@ li {
   background-color: rgba(126, 200, 227, 0.9);
 }
 
+/***************************************************************Display Classification Items*********************************************************/
+
+#inv-display {
+  display: grid;
+  grid-template-columns: 1fr; /* 1 column on small screens */
+  gap: 20px;
+  list-style: none;
+  padding: 0;
+  /*margin: 0 auto;*/
+  max-width: 1200px;
+  margin-top: -20vh;
+}
+
+#inv-display li {
+  background-color: #f4f4f4;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.vehicle-detail-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  margin: 20px;
+  align-items: start;
+}
+
+.vehicle-image img {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.vehicle-info {
+  font-family: 'Lucida Sans', 'Lucida Grande', sans-serif;
+  text-align: left;
+  padding: 10px;
+}
+
+.car-detais{
+  font-family: 'Lucida Sans', 'Lucida Grande', sans-serif;
+  text-align: justify;
+  padding: 10px;
+  font-size: 20px;
+}
+
+strong{
+  color: #050A30;
+}
 
 /******************************************************************LARGE SCREENS*************************************************************/
 @media screen and (min-width: 768px) {
@@ -266,7 +319,7 @@ li {
     justify-content: center; 
   }
   
-  nav ul li {
+  nav ul li a{
     padding: 10px 65px;
     color: white;
     font-size: 20px;
@@ -307,4 +360,35 @@ li {
   .copyright {
     margin-top: -10px;
   }
+
+  /*******************************************************************Display Classification Items*********************************************************/
+  #inv-display li {
+  background-color: #f4f4f4;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  text-align: center;
+} 
+  
+  #inv-display {
+    grid-template-columns: repeat(3, 1fr); /* 3 columns on desktops */
+    margin-top: 90px;
+    margin-left: -39.1vw;
+  }
+
+  .vehicle-detail-container {
+    grid-column: span 2;
+    grid-row: span 2;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .vehicle-image {
+    max-width: 100%;
+  }
+
+  .vehicle-info {
+    padding-left: 30px;
+  }
+
 }

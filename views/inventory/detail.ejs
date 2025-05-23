@@ -1,0 +1,30 @@
+<!--<h1><%= title %></h1>
+
+<div class="vehicle-detail">
+  <img src="<%= item.inv_image %>" alt="Image of <%= item.inv_make %> <%= item.inv_model %>">
+  <ul>
+    <li><strong>Price:</strong> $<%= item.inv_price.toLocaleString() %></li>
+    <li><strong>Description:</strong> <%= item.inv_description %></li>
+    <li><strong>Color:</strong> <%= item.inv_color %></li>
+    <li><strong>Mileage:</strong> <%= item.inv_miles.toLocaleString() %></li>
+  </ul>
+</div>-->
+
+<div class="vehicle-detail-container">
+  <div class="vehicle-image">
+    <img src="<%= item.inv_image %>" alt="Image of <%= item.inv_make %> <%= item.inv_model %>">
+  </div>
+  <div class="vehicle-info">
+    <h1><%= item.inv_make %> <%= item.inv_model %></h1>
+    <br>
+    <p class="car-detais"><strong>Price:</strong> $<%= new Intl.NumberFormat('en-US').format(item.inv_price) %></p>
+    <br>
+    <p class="car-detais"><strong>Description:</strong> <%= item.inv_description %></p>
+    <br>
+    <p class="car-detais"><strong>Color:</strong> <%= item.inv_color %></p>
+    <br>
+    <p class="car-detais"><strong>Mileage:</strong> <%= new Intl.NumberFormat('en-US').format(item.inv_miles) %> mi</p>
+  </div>
+</div>
+
+

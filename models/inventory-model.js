@@ -25,6 +25,22 @@ async function getInventoryByClassificationId(classification_id) {
   }
 }
 
+async function getInventoryById(inv_id) {
+  try {
+    const result = await pool.query(
+      "SELECT * FROM public.inventory WHERE inv_id = $1",
+      [inv_id]
+    )
+    return result.rows
+  } catch (error) {
+    console.error("getInventoryById error " + error)
+  }
+}
 
-module.exports = {getClassifications}
-module.exports = {getClassifications, getInventoryByClassificationId};
+
+
+module.exports = { 
+  getClassifications,
+  getInventoryByClassificationId,
+  getInventoryById
+ };
