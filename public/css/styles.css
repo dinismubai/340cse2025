@@ -283,6 +283,152 @@ strong{
   color:crimson
 }
 
+/*****************************************************************Register Page*********************************************************/
+.register-form {
+  max-width: 400px;
+  margin: 50px auto;
+  padding: 20px;
+  background-color: #ffffff;
+  border: 2px solid #050A30;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  font-family: 'Lucida Sans', 'Lucida Grande', sans-serif;
+}
+
+.register-form label {
+  margin-top: 10px;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #050A30;
+}
+
+.register-form input[type="text"],
+.register-form input[type="email"],
+.register-form input[type="password"] {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.register-form button {
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #050A30;
+  color: #ffffff;
+  font-size: 18px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.register-form button:hover {
+  background-color: #000C66;
+}
+
+.notice {
+  max-width: 400px;
+  margin: 20px auto;
+  padding: 10px;
+  border: 1px solid #0000FF;
+  background-color: #e6f0ff;
+  color: #000C66;
+  border-radius: 5px;
+  text-align: center;
+  font-family: 'Lucida Sans', 'Lucida Grande', sans-serif;
+}
+
+.register-link {
+  text-align: center;
+  margin-top: 15px;
+  font-size: 14px;
+  font-family: 'Lucida Sans', 'Lucida Grande', sans-serif;
+}
+
+.register-link a {
+  color: #0000FF;
+  text-decoration: none;
+}
+
+.register-link a:hover {
+  text-decoration: underline;
+}
+
+/*****************************************************************Login Page*********************************************************/
+.login-form {
+  max-width: 400px;
+  margin: 50px auto;
+  padding: 20px;
+  background-color: #ffffff;
+  border: 2px solid #050A30;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  font-family: 'Lucida Sans', 'Lucida Grande', sans-serif;
+}
+
+.login-form label {
+  margin-top: 10px;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #050A30;
+}
+
+.login-form input[type="email"],
+.login-form input[type="password"] {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.login-form button {
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #050A30;
+  color: #ffffff;
+  font-size: 18px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.login-form button:hover {
+  background-color: #000C66;
+}
+
+.notice {
+  max-width: 400px;
+  margin: 20px auto;
+  padding: 10px;
+  border: 1px solid #0000FF;
+  background-color: #e6f0ff;
+  color: #000C66;
+  border-radius: 5px;
+  text-align: center;
+  font-family: 'Lucida Sans', 'Lucida Grande', sans-serif;
+}
+
+.account-link {
+  text-align: center;
+  margin-top: 15px;
+  font-size: 14px;
+  font-family: 'Lucida Sans', 'Lucida Grande', sans-serif;
+}
+
+.account-link a {
+  color: #0000FF;
+  text-decoration: none;
+}
+
+.account-link a:hover {
+  text-decoration: underline;
+}
+
+
 /******************************************************************LARGE SCREENS*************************************************************/
 @media screen and (min-width: 768px) {
   body {
@@ -394,6 +540,21 @@ strong{
 
   .vehicle-info {
     padding-left: 30px;
+  }
+
+  /******************************************************************Login Page*********************************************************/
+  .account-link {
+  text-align: right;
+  margin-top: 15px;
+  font-size: 14px;
+  font-family: 'Lucida Sans', 'Lucida Grande', sans-serif;
+  margin-right: -310px;
+}
+
+/********************************************************************Register Page*********************************************************/
+.register-link {
+    text-align: right;
+    margin-right: -310px;
   }
 
 }
