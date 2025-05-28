@@ -284,77 +284,75 @@ strong{
 }
 
 /*****************************************************************Register Page*********************************************************/
-.register-form {
-  max-width: 400px;
-  margin: 50px auto;
-  padding: 20px;
-  background-color: #ffffff;
-  border: 2px solid #050A30;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+.register-page-container {
   display: flex;
-  flex-direction: column;
-  font-family: 'Lucida Sans', 'Lucida Grande', sans-serif;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
+  padding: 2rem;
+  background-color: #f7f7f7;
+  grid-column: span 2;
+  grid-row: span 2;
 }
 
-.register-form label {
-  margin-top: 10px;
+.register-card {
+  
+  margin-right: -30px;
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  max-width: 450px;
+  border: 2px solid #050A30;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.register-card h1 {
+  color: #050A30;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.register-card label {
+  display: block;
   margin-bottom: 5px;
   font-weight: bold;
   color: #050A30;
 }
 
-.register-form input[type="text"],
-.register-form input[type="email"],
-.register-form input[type="password"] {
+.register-card input {
+  width: 100%;
   padding: 10px;
-  font-size: 16px;
-  border: 1px solid #ccc;
+  margin-bottom: 15px;
   border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
 }
 
-.register-form button {
-  margin-top: 20px;
-  padding: 10px;
+.register-card button {
+  width: 100%;
+  padding: 12px;
   background-color: #050A30;
-  color: #ffffff;
-  font-size: 18px;
+  color: white;
   border: none;
+  font-size: 1.1rem;
   border-radius: 5px;
   cursor: pointer;
 }
 
-.register-form button:hover {
+.register-card button:hover {
   background-color: #000C66;
 }
 
-.notice {
-  max-width: 400px;
-  margin: 20px auto;
-  padding: 10px;
-  border: 1px solid #0000FF;
+.flash-message {
   background-color: #e6f0ff;
-  color: #000C66;
-  border-radius: 5px;
-  text-align: center;
-  font-family: 'Lucida Sans', 'Lucida Grande', sans-serif;
+  border-left: 5px solid #050A30;
+  padding: 10px;
+  margin-bottom: 1rem;
+  font-weight: 500;
 }
 
-.register-link {
-  text-align: center;
-  margin-top: 15px;
-  font-size: 14px;
-  font-family: 'Lucida Sans', 'Lucida Grande', sans-serif;
-}
-
-.register-link a {
-  color: #0000FF;
-  text-decoration: none;
-}
-
-.register-link a:hover {
-  text-decoration: underline;
-}
 
 /*****************************************************************Login Page*********************************************************/
 .login-form {
@@ -552,9 +550,6 @@ strong{
 }
 
 /********************************************************************Register Page*********************************************************/
-.register-link {
-    text-align: right;
-    margin-right: -310px;
-  }
+
 
 }

@@ -20,6 +20,7 @@ const utilities = require("./utilities/")
 const errorRoute = require("./routes/errorRoute")
 const accountRoute = require("./routes/accountRoute")
 const registerRoute = require("./routes/registerRoute")
+const bodyParser = require("body-parser")
 
 
 
@@ -52,6 +53,8 @@ app.set("view engine", "ejs")
 app.use(expressLayouts)
 app.set("layout", "./layouts/layout") // not at views root
 
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 
 /* ***********************
  * Routes
@@ -72,7 +75,7 @@ app.use("/inv", inventoryRoute)
 // Account routes
 app.use("/account", accountRoute)
 // Register routes
-//app.use("/register", registerRoute)
+app.use("/register", registerRoute)
 
 /* ***********************
 * Express Error Handler
