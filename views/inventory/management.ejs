@@ -1,0 +1,13 @@
+<main id="inventory-management-main">
+  <h1 id="inventory-management-title">Inventory Management</h1>
+  <p id="inventory-management-instructions">Use the links below to manage the inventory.</p>
+
+  <% if (message && message.length > 0) { %>
+    <div id="inventory-flash-message"><%= message %></div>
+  <% } %>
+
+  <ul id="inventory-links-list">
+    <li><a id="add-classification-link" href="/inv/add-classification">Add New Classification</a></li>
+    <li><a id="add-inventory-link" href="/inv/add-inventory">Add New Inventory</a></li>
+  </ul>
+</main>

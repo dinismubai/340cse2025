@@ -1,24 +1,23 @@
+<h1 class="loginh1"><%= title %></h1>
 
-    <h1><%= title %></h1>
+<% if (message && message.length > 0) { %>
+  <div class="notice"><%= message %></div>
+<% } %>
 
-    <% if (message && message.length > 0) { %>
-      <div class="notice"><%= message %></div>
-    <% } %>
+<form action="/account/login" method="post" class="login-form">
+  <label for="email">Email:</label>
+  <input type="email" id="account_email" name="account_email" required title="Fill in your email address"
+    value="<%= typeof account_email !== 'undefined' ? account_email : '' %>">
 
-    <form action="/account/login" method="post" class="login-form">
-      <label for="email">Email:</label>
-      <input type="email" id="email" name="email" required />
+  <label for="password">Password:</label>
+  <input type="password" id="account_password" name="account_password" required
+    pattern="^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{12,}$"
+    title="Password must be at least 12 characters long, contain one uppercase letter, one number, and one special character.">
 
-      <label for="password">Password:</label>
-      <input type="password" id="account_password" name="account_password" required
-        pattern="^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{12,}$"
-        title="Password must be at least 12 characters long, contain one uppercase letter, one number, and one special character.">
+  <button type="submit">Login</button>
+</form>
 
-      <button type="submit">Login</button>
-    </form>
-
-    <p class="account-link">
-      No account?
-      <a href="/account/register">Sign-up</a>
-    </p>
-
+<p class="account-link">
+  No account?
+  <a href="/account/register">Sign-up</a>
+</p>

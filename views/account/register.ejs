@@ -1,3 +1,6 @@
+<% if (typeof errors === "undefined") { errors = null } %> <!--To avoid errors-->
+
+
 <div class="register-page-container">
   <div class="register-card">
     <h1>Register</h1>
@@ -8,24 +11,23 @@
 
     <% if (errors) { %>
     <ul class="notice">
-    <% errors.errors.forEach(error => { %>
-    <li><%= error.msg %></li>
-    <% }) %>
+      <% errors.errors.forEach(error => { %>
+        <li><%= error.msg %></li>
+      <% }) %>
     </ul>
     <% } %>
 
-
     <form action="/account/register" method="POST">
       <label for="firstname">First Name</label>
-      <input type="text" id="account_firstname" name="account_firstname" required 
+      <input type="text" name="account_firstname" id="accountFirstname" required title="Fill in your first name"
         value="<%= typeof account_firstname !== 'undefined' ? account_firstname : '' %>">
 
       <label for="lastname">Last Name</label>
-      <input type="text" id="account_lastname" name="account_lastname" required 
+      <input type="text" id="account_lastname" name="account_lastname" required title="Fill in your last name"
         value="<%= typeof account_lastname !== 'undefined' ? account_lastname : '' %>">
 
       <label for="email">Email Address</label>
-      <input type="email" id="account_email" name="account_email" required 
+      <input type="email" id="account_email" name="account_email" required title="Fill in your email address"
         value="<%= typeof account_email !== 'undefined' ? account_email : '' %>">
 
       <label for="password">Password</label>
