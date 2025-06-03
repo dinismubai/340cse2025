@@ -22,6 +22,16 @@ router.get("/", invController.buildManagementView)
 router.get("/add-classification", invController.buildAddClassification)
 router.get("/add-inventory", invController.buildAddInventoryForm)
 
+router.get("/getInventory/:classification_id", invController.getInventoryJSON)
+
+// Route to build the edit inventory view
+router.get(
+  "/edit/:inv_id",
+  utilities.handleErrors(invController.buildEditInventoryView)
+)
+
+
+
 // Route to process form with validation
 router.post(
   "/add-inventory",

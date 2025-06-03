@@ -673,6 +673,62 @@ main h1 {
   background-color: #003399;
 }
 
+/******************************************************************Update Vehicle*********************************************************/
+.edit-form {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 1.5rem;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr;
+}
+
+.edit-form .form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.edit-form .form-group.full-width {
+  grid-column: 1 / -1;
+}
+
+.edit-form label {
+  margin-bottom: 0.3rem;
+  font-weight: 600;
+}
+
+.edit-form input,
+.edit-form select,
+.edit-form textarea {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+.edit-form textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.edit-form button {
+  padding: 0.75rem;
+  font-size: 1rem;
+  background-color: #003366;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.edit-form button:hover {
+  background-color: #005599;
+}
+
 
 
 /******************************************************************LARGE SCREENS*************************************************************/
@@ -797,7 +853,9 @@ main h1 {
   margin-right: 220px;
 }
 
-/********************************************************************Register Page*********************************************************/
-
+/********************************************************************Update Vehicle*********************************************************/
+.edit-form {
+    grid-template-columns: 1fr 1fr;
+  }
 
 }

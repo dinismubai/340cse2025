@@ -10,4 +10,19 @@
     <li><a id="add-classification-link" href="/inv/add-classification">Add New Classification</a></li>
     <li><a id="add-inventory-link" href="/inv/add-inventory">Add New Inventory</a></li>
   </ul>
+
+  <section id="inventory-display-section">
+    <h2>Manage Inventory</h2>
+    <p>Select a classification from the list to see the items belonging to the classification.</p>
+
+    <!-- Classification list from controller -->
+    <%- classificationList %>
+
+    <!-- Table for displaying inventory via JS -->
+    <table id="inventoryDisplay"></table>
+
+    <!-- Noscript fallback -->
+    <noscript>JavaScript must be enabled to use this page.</noscript>
+  </section>
 </main>
+

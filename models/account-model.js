@@ -3,13 +3,13 @@ const bcrypt = require("bcryptjs")
 
 async function registerAccount(account_firstname, account_lastname, account_email, account_password) {
   try {
-    const hashedPassword = await bcrypt.hash(account_password, 10)
+    //const hashedPassword = await bcrypt.hash(account_password, 10)
     const sql = `
       INSERT INTO account (account_firstname, account_lastname, account_email, account_password, account_type)
       VALUES ($1, $2, $3, $4, 'Client')
       RETURNING *
     `
-    const result = await pool.query(sql, [account_firstname, account_lastname, account_email, hashedPassword])
+    const result = await pool.query(sql, [account_firstname, account_lastname, account_email, account_password,])
     return result.rows[0]
   } catch (error) {
     console.error("Error registering account:", error)
@@ -27,12 +27,25 @@ async function checkExistingEmail(account_email) {
   }
 }
 
-async function getAccountByEmail(email) {
+/*async function getAccountByEmail(account_email) {
   try {
-    const result = await pool.query("SELECT * FROM account WHERE account_email = $1", [email])
+    const result = await pool.query("SELECT * FROM account WHERE account_email = $1", [account_email])
     return result.rows[0]
   } catch (error) {
-    throw error
+    return new Error("No matching email found")
+  }
+}*/
+/* *****************************
+* Return account data using email address
+* ***************************** */
+async function getAccountByEmail (account_email) {
+  try {
+    const result = await pool.query(
+      'SELECT account_id, account_firstname, account_lastname, account_email, account_type, account_password FROM account WHERE account_email = $1',
+      [account_email])
+    return result.rows[0]
+  } catch (error) {
+    return new Error("No matching email found")
   }
 }
 

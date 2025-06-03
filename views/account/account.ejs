@@ -1,0 +1,13 @@
+
+  <h1>Account Management</h1>
+
+  <% if (message && message.length > 0) { %>
+    <div class="flash-message"><%= message %></div>
+  <% } %>
+
+  <% if (errors) { %>
+    <div class="error-message"><%= errors %></div>
+  <% } %>
+
+  <p>You're logged in.</p>
+

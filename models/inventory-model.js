@@ -75,6 +75,32 @@ async function addInventory(
   }
 }
 
+async function getInventoryByClassificationId(classification_id) {
+  try {
+    const data = await pool.query(
+      `SELECT * FROM inventory WHERE classification_id = $1`,
+      [classification_id]
+    )
+    return data.rows
+  } catch (error) {
+    console.error("Error getting inventory by classification:", error)
+    throw error
+  }
+}
+
+async function getInventoryItemById(inv_id) {
+  try {
+    const result = await pool.query(
+      "SELECT * FROM inventory WHERE inv_id = $1",
+      [inv_id]
+    )
+    return result.rows[0]
+  } catch (error) {
+    console.error("Model error getting inventory item:", error)
+    throw error
+  }
+}
+
 
 
 module.exports = { 
@@ -82,5 +108,7 @@ module.exports = {
   getInventoryByClassificationId,
   getInventoryById,
   addClassification,
-  addInventory
+  addInventory,
+  getInventoryByClassificationId,
+  getInventoryItemById,
  };

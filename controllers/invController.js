@@ -2,7 +2,6 @@ const invModel = require("../models/inventory-model")
 const utilities = require("../utilities/")
 const { validationResult } = require("express-validator")
 
-
 /* ***************************
  *  Build inventory by classification view
  * ************************** */
@@ -10,10 +9,10 @@ async function buildByClassificationId(req, res, next) {
   const classification_id = req.params.classificationId
   const data = await invModel.getInventoryByClassificationId(classification_id)
   const grid = await utilities.buildClassificationGrid(data)
-  let nav = await utilities.getNav()
-  const className = data[0].classification_name
+  const nav = await utilities.getNav()
+  const className = data[0]?.classification_name || "Unknown"
   res.render("./inventory/classification", {
-    title: className + " vehicles",
+    title: `${className} vehicles`,
     nav,
     grid,
   })
@@ -25,7 +24,7 @@ async function buildByInventoryId(req, res, next) {
   const item = data[0]
   const nav = await utilities.getNav()
   res.render("./inventory/detail", {
-    title: item.inv_make + " " + item.inv_model,
+    title: `${item.inv_make} ${item.inv_model}`,
     nav,
     item,
   })
@@ -36,14 +35,17 @@ async function buildByInventoryId(req, res, next) {
  * ************************** */
 async function buildManagementView(req, res) {
   const nav = await utilities.getNav()
+  const classificationList = await utilities.buildClassificationList()
+
   res.render("inventory/management", {
     title: "Inventory Management",
     nav,
+    classificationList,
     message: req.flash("notice")
   })
 }
 
-/***********Add classification******** */
+/*********** Add classification ******** */
 // Render form
 async function buildAddClassification(req, res) {
   const nav = await utilities.getNav()
@@ -65,7 +67,7 @@ async function addClassification(req, res) {
 
     if (result) {
       req.flash("notice", `The classification "${classification_name}" was successfully added.`)
-      const updatedNav = await utilities.getNav() // refresh nav
+      const updatedNav = await utilities.getNav()
       return res.status(201).render("inventory/management", {
         title: "Inventory Management",
         nav: updatedNav,
@@ -92,8 +94,8 @@ async function addClassification(req, res) {
   }
 }
 
-/***************Build Inventory, Add inventory*************** */
-/* Render Add Inventory Form */
+/*************** Add inventory *************** */
+// Render Add Inventory Form
 async function buildAddInventoryForm(req, res) {
   const nav = await utilities.getNav()
   const classificationList = await utilities.buildClassificationList()
@@ -107,7 +109,7 @@ async function buildAddInventoryForm(req, res) {
   })
 }
 
-/* Process Add Inventory Submission */
+// Process Add Inventory Submission
 async function addInventory(req, res) {
   const {
     classification_id, inv_make, inv_model, inv_year,
@@ -165,6 +167,39 @@ async function addInventory(req, res) {
   }
 }
 
+// JSON API for dynamic inventory fetching
+async function getInventoryJSON(req, res) {
+  const classification_id = req.params.classification_id
+  const inventoryData = await invModel.getInventoryByClassificationId(classification_id)
+  res.json(inventoryData)
+}
+
+// Build Edit Inventory View
+async function buildEditInventoryView(req, res) {
+  const inv_id = req.params.inv_id
+
+  try {
+    const itemData = await invModel.getInventoryItemById(inv_id)
+    const classificationList = await utilities.buildClassificationList(itemData.classification_id)
+    const nav = await utilities.getNav()
+
+    res.render("inventory/edit-inventory", {
+      title: `Edit ${itemData.inv_make} ${itemData.inv_model}`,
+      nav,
+      classificationList,
+      message: null,
+      errors: [],
+      ...itemData
+    })
+  } catch (error) {
+    console.error("Error building edit inventory view:", error)
+    res.status(500).render("errors/error", {
+      title: "Server Error",
+      message: "Failed to load vehicle for editing",
+      nav: await utilities.getNav()
+    })
+  }
+}
 
 const invCont = {
   buildByClassificationId,
@@ -173,7 +208,9 @@ const invCont = {
   buildAddClassification,
   addClassification,
   buildAddInventoryForm,
-  addInventory
+  addInventory,
+  getInventoryJSON,
+  buildEditInventoryView
 }
 
 module.exports = invCont
