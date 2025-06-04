@@ -12,16 +12,20 @@
   </ul>
 
   <section id="inventory-display-section">
-    <h2>Manage Inventory</h2>
-    <p>Select a classification from the list to see the items belonging to the classification.</p>
+  <h2>Manage Inventory</h2>
+  <p>Select a classification from the list to see the items belonging to the classification.</p>
 
-    <!-- Classification list from controller -->
+  <label for="classification_id">Choose a classification:</label>
+  <select id="classification_id" name="classification_id" required>
     <%- classificationList %>
+  </select>
 
-    <!-- Table for displaying inventory via JS -->
-    <table id="inventoryDisplay"></table>
+  <table id="inventoryDisplay"></table>
 
-    <!-- Noscript fallback -->
-    <noscript>JavaScript must be enabled to use this page.</noscript>
-  </section>
+  <noscript>JavaScript must be enabled to use this page.</noscript>
+</section>
+
+<script src="/js/inventory.js" defer></script>
+
+
 </main>

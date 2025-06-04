@@ -30,15 +30,13 @@ router.get(
   utilities.handleErrors(invController.buildEditInventoryView)
 )
 
-
-
 // Route to process form with validation
-router.post(
+/*router.post(
   "/add-inventory",
   invValidate.inventoryRules(),
   invValidate.checkInventoryData,
   invController.addInventory
-)
+)*/
 
 router.post(
   "/add-classification",
@@ -48,4 +46,20 @@ router.post(
 )
 
 
+// Add new inventory
+router.post(
+  "/add-inventory",
+  invValidate.inventoryRules(),
+  invValidate.checkInventoryData,
+  utilities.handleErrors(invController.addInventory)
+)
+
+// Update existing inventory
+router.post(
+  "/update",
+  invValidate.inventoryRules(),
+  invValidate.checkUpdateData,
+  utilities.handleErrors(invController.updateInventory)
+)
 module.exports = router
+

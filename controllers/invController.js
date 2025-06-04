@@ -109,7 +109,7 @@ async function buildAddInventoryForm(req, res) {
   })
 }
 
-// Process Add Inventory Submission
+// Process To Add Inventory Item
 async function addInventory(req, res) {
   const {
     classification_id, inv_make, inv_model, inv_year,
@@ -202,6 +202,92 @@ async function buildEditInventoryView(req, res) {
   }
 }
 
+/* ***************************
+ *  Update Inventory Data
+ * ************************** */
+async function updateInventory(req, res, next) {
+  let nav = await utilities.getNav()
+
+  const {
+    inv_id,
+    inv_make,
+    inv_model,
+    inv_description,
+    inv_image,
+    inv_thumbnail,
+    inv_price,
+    inv_year,
+    inv_miles,
+    inv_color,
+    classification_id,
+  } = req.body
+
+  try {
+    const updateResult = await invModel.updateInventory(
+      inv_id,
+      inv_make,
+      inv_model,
+      inv_description,
+      inv_image,
+      inv_thumbnail,
+      inv_price,
+      inv_year,
+      inv_miles,
+      inv_color,
+      classification_id
+    )
+
+    if (updateResult) {
+      const itemName = inv_make + " " + inv_model
+      req.flash("notice", `The ${itemName} was successfully updated.`)
+      return res.redirect("/inv/")
+    } else {
+      const classificationList = await utilities.buildClassificationList(classification_id)
+      const itemName = `${inv_make} ${inv_model}`
+      req.flash("notice", "Sorry, the update failed.")
+      return res.status(501).render("inventory/edit-inventory", {
+        title: "Edit " + itemName,
+        nav,
+        classificationList,
+        errors: null,
+        inv_id,
+        inv_make,
+        inv_model,
+        inv_year,
+        inv_description,
+        inv_image,
+        inv_thumbnail,
+        inv_price,
+        inv_miles,
+        inv_color,
+        classification_id
+      })
+    }
+  } catch (error) {
+    console.error("Update Error:", error)
+    const classificationList = await utilities.buildClassificationList(classification_id)
+    const itemName = `${inv_make} ${inv_model}`
+    req.flash("notice", "Sorry, there was a server error.")
+    return res.status(500).render("inventory/edit-inventory", {
+      title: "Edit " + itemName,
+      nav,
+      classificationList,
+      errors: null,
+      inv_id,
+      inv_make,
+      inv_model,
+      inv_year,
+      inv_description,
+      inv_image,
+      inv_thumbnail,
+      inv_price,
+      inv_miles,
+      inv_color,
+      classification_id
+    })
+  }
+}
+
 const invCont = {
   buildByClassificationId,
   buildByInventoryId,
@@ -211,7 +297,8 @@ const invCont = {
   buildAddInventoryForm,
   addInventory,
   getInventoryJSON,
-  buildEditInventoryView
+  buildEditInventoryView,
+  updateInventory,
 }
 
 module.exports = invCont

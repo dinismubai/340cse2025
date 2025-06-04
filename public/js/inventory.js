@@ -1,7 +1,9 @@
 // public/js/inventory.js
 
 // Hook para o <select> da classificação
-let classificationList = document.getElementById("classificationList")
+//let classificationList = document.getElementById("classificationList")
+let classificationList = document.getElementById("classification_id")
+
 
 classificationList.addEventListener("change", function () {
   let classification_id = classificationList.value
