@@ -203,6 +203,31 @@ async function buildEditInventoryView(req, res) {
 }
 
 /* ***************************
+ *  Delete Inventory Item
+ * ************************** */
+async function deleteInventory(req, res, next) {
+  const nav = await utilities.getNav()
+  const inv_id = parseInt(req.body.inv_id)
+
+  try {
+    const deleteResult = await invModel.deleteInventory(inv_id)
+
+    if (deleteResult) {
+      req.flash("notice", "The vehicle was successfully deleted.")
+      return res.redirect("/inv/")
+    } else {
+      req.flash("notice", "Sorry, the delete failed.")
+      return res.redirect(`/inv/delete/${inv_id}`)
+    }
+  } catch (error) {
+    console.error("Delete Error:", error)
+    req.flash("notice", "Sorry, there was a server error.")
+    return res.redirect(`/inv/delete/${inv_id}`)
+  }
+}
+
+
+/* ***************************
  *  Update Inventory Data
  * ************************** */
 async function updateInventory(req, res, next) {
@@ -288,6 +313,33 @@ async function updateInventory(req, res, next) {
   }
 }
 
+// Build Delete Inventory Confirmation View
+async function buildDeleteInventoryView(req, res) {
+  const inv_id = req.params.inv_id
+
+  try {
+    const itemData = await invModel.getInventoryItemById(inv_id)
+    const nav = await utilities.getNav()
+    const name = `${itemData.inv_make} ${itemData.inv_model}`
+
+    res.render("inventory/delete-confirm", {
+      title: `Delete ${name}`,
+      nav,
+      message: null,
+      errors: [],
+      ...itemData
+    })
+  } catch (error) {
+    console.error("Error building delete confirmation view:", error)
+    res.status(500).render("errors/error", {
+      title: "Server Error",
+      message: "Failed to load vehicle for deletion",
+      nav: await utilities.getNav()
+    })
+  }
+}
+
+
 const invCont = {
   buildByClassificationId,
   buildByInventoryId,
@@ -299,6 +351,8 @@ const invCont = {
   getInventoryJSON,
   buildEditInventoryView,
   updateInventory,
+  buildDeleteInventoryView,
+  deleteInventory,
 }
 
 module.exports = invCont
