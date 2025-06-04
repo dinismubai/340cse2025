@@ -16,8 +16,10 @@
   <% } %>
 
   <form id="addInventoryForm" action="/inventory/add-inventory" method="post">
-    <label for="classificationList">Classification</label>
-    <%- classificationList %>
+    <label for="classification_id">Classification</label>
+    <select id="classification_id" name="classification_id" required>
+      <%- classificationList %>
+    </select>
 
     <label for="inv_make">Make</label>
     <input 

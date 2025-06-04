@@ -35,10 +35,12 @@ const inventoryRules = () => {
     body("inv_price").isFloat({ min: 0 }).withMessage("Price must be a valid number."),
     body("inv_miles").isInt({ min: 0 }).withMessage("Miles must be a valid number."),
     body("inv_color").trim().isLength({ min: 1 }).withMessage("Color is required."),
-    body("classification_id").isInt().withMessage("Classification is required.")
+    /*body("classification_id").isInt().withMessage("Classification is required.")*/
+    body("classification_id").trim().notEmpty().withMessage("Classification is required.").isInt({ min: 1 }).withMessage("Invalid classification selected.")
   ]
 }
 
+// Check Inventory Data
 const checkInventoryData = async (req, res, next) => {
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
@@ -56,9 +58,31 @@ const checkInventoryData = async (req, res, next) => {
   next()
 }
 
+// Direct errors to the edit view
+const checkUpdateData = async (req, res, next) => {
+  const errors = validationResult(req)
+  if (!errors.isEmpty()) {
+    const nav = await utilities.getNav()
+    const classificationList = await utilities.buildClassificationList(req.body.classification_id)
+    const { inv_id, inv_make, inv_model } = req.body
+    return res.status(400).render("inventory/edit-inventory", {
+      title: `Edit ${inv_make} ${inv_model}`,
+      nav,
+      classificationList,
+      message: req.flash("notice"),
+      errors: errors.array(),
+      ...req.body,
+      inv_id  // explicitly add the ID to the response
+    })
+  }
+  next()
+}
+
+
 module.exports = {
   classificationRules,
   checkClassificationData,
   inventoryRules,
-  checkInventoryData
+  checkInventoryData,
+  checkUpdateData,
 }

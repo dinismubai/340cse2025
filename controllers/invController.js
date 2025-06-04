@@ -180,6 +180,7 @@ async function buildEditInventoryView(req, res) {
 
   try {
     const itemData = await invModel.getInventoryItemById(inv_id)
+    console.log("Classification ID:", itemData.classification_id)
     const classificationList = await utilities.buildClassificationList(itemData.classification_id)
     const nav = await utilities.getNav()
 
