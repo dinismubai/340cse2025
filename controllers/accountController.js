@@ -40,7 +40,7 @@ async function registerAccount(req, res) {
     // 1. Verifica se o email já está registado
     const emailExists = await accountModel.checkExistingEmail(account_email)
     if (emailExists) {
-      req.flash("notice", "Este email já está registado. Por favor, faça login.")
+      req.flash("notice", "This email has been registered. Please log in or use a different email.")
       return res.status(409).render("account/register", {
         title: "Register",
         nav,
@@ -197,7 +197,7 @@ async function buildUpdateAccountForm(req, res, next) {
     const accountData = await accountModel.getAccountById(accountId)
 
     if (!accountData) {
-      req.flash("notice", "Conta não encontrada.")
+      req.flash("notice", "Account not found.")
       return res.redirect("/account")
     }
 
@@ -225,7 +225,7 @@ async function updateAccount(req, res) {
     const existingAccount = await accountModel.getAccountByEmail(account_email)
     if (existingAccount && existingAccount.account_id !== parseInt(account_id)) {
       const accountData = await accountModel.getAccountById(account_id)
-      req.flash("notice", "Este email já está em uso por outro utilizador.")
+      req.flash("notice", "This email is in use by another user.")
       return res.status(409).render("account/edit-account", {
         title: "Update Account",
         nav,
@@ -240,7 +240,7 @@ async function updateAccount(req, res) {
     if (updateResult) {
       const accountData = await accountModel.getAccountById(account_id)
       req.session.account = accountData
-      req.flash("notice", "Conta atualizada com sucesso.")
+      req.flash("notice", "Account updated successfuly.")
       return res.render("account/account", {
         title: "Account Management",
         nav,
@@ -249,7 +249,7 @@ async function updateAccount(req, res) {
         errors: []
       })
     } else {
-      throw new Error("Falha na atualização da conta.")
+      throw new Error("Account update failure.")
     }
   } catch (error) {
     console.error(error)
@@ -258,7 +258,7 @@ async function updateAccount(req, res) {
       title: "Update Account",
       nav,
       account: accountData,
-      errors: [{ msg: "Erro ao atualizar a conta. Tente novamente." }],
+      errors: [{ msg: "Error updating account. Please try again." }],
       message: null
     })
   }
@@ -276,7 +276,7 @@ async function updatePassword(req, res) {
     if (result) {
       const accountData = await accountModel.getAccountById(account_id)
       req.session.account = accountData
-      req.flash("notice", "Password atualizada com sucesso.")
+      req.flash("notice", "Password updated successfuly.")
       return res.render("account/account", {
         title: "Account Management",
         nav,
@@ -285,7 +285,7 @@ async function updatePassword(req, res) {
         errors: []
       })
     } else {
-      throw new Error("Falha na atualização da password.")
+      throw new Error("Update password failure.")
     }
   } catch (error) {
     console.error(error)
@@ -294,7 +294,7 @@ async function updatePassword(req, res) {
       title: "Update Account",
       nav,
       account: accountData,
-      errors: [{ msg: "Erro ao atualizar a password. Tente novamente." }],
+      errors: [{ msg: "Error updating password. Please try again." }],
       message: null
     })
   }
