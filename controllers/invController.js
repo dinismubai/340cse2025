@@ -18,7 +18,7 @@ async function buildByClassificationId(req, res, next) {
   })
 }
 
-async function buildByInventoryId(req, res, next) {
+/*async function buildByInventoryId(req, res, next) {
   const inv_id = req.params.inv_id
   const data = await invModel.getInventoryById(inv_id)
   const item = data[0]
@@ -28,7 +28,31 @@ async function buildByInventoryId(req, res, next) {
     nav,
     item,
   })
+}*/
+async function buildByInventoryId(req, res, next) {
+  try {
+    const inv_id = req.params.inv_id // <- Usa o mesmo nome da rota
+    const data = await invModel.getInventoryById(inv_id)
+
+    if (!data || data.length < 1) {
+      const error = new Error("Vehicle not found")
+      error.status = 404
+      return next(error)
+    }
+
+    const item = data[0]
+    const nav = await utilities.getNav()
+
+    res.render("./inventory/detail", {
+      title: `${item.inv_make} ${item.inv_model}`,
+      nav,
+      item,
+    })
+  } catch (err) {
+    next(err)
+  }
 }
+
 
 /* ***************************
  *  Build management view

@@ -1,0 +1,56 @@
+<main>
+  <h1>Update Account</h1>
+
+  <% errors = errors || []; %>  <!-- Garante que errors existe -->
+
+  <% if (errors.length > 0) { %>
+    <ul class="error-list">
+      <% errors.forEach(error => { %>
+        <li><%= error.msg %></li>
+      <% }) %>
+    </ul>
+  <% } %>
+
+  <!-- Formulário para atualizar dados da conta -->
+  <form action="/account/update" method="POST" novalidate>
+    <input type="hidden" name="account_id" value="<%= account.account_id %>">
+
+    <label for="account_firstname">First Name</label>
+    <input type="text" id="account_firstname" name="account_firstname" required value="<%= account.account_firstname %>" autocomplete="given-name">
+
+    <label for="account_lastname">Last Name</label>
+    <input type="text" id="account_lastname" name="account_lastname" required value="<%= account.account_lastname %>" autocomplete="family-name">
+
+    <label for="account_email">Email</label>
+    <input type="email" id="account_email" name="account_email" required value="<%= account.account_email %>" autocomplete="email">
+
+    <button type="submit">Update Account</button>
+  </form>
+
+  <hr>
+
+  <!-- Formulário para alteração de password -->
+  <form action="/account/update-password" method="POST" novalidate>
+    <input type="hidden" name="account_id" value="<%= account.account_id %>">
+
+    <p>Enter a new password to change your current password.</p>
+    <p>Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character.</p>
+
+    <label for="account_password">New Password</label>
+    <input
+      type="password"
+      id="account_password"
+      name="account_password"
+      required
+      minlength="8"
+      pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$"
+      autocomplete="new-password"
+      aria-describedby="passwordHelp"
+    >
+    <div id="passwordHelp" class="form-text">
+      Use a strong password with at least 8 characters including uppercase, lowercase, numbers and special symbols.
+    </div>
+
+    <button type="submit">Change Password</button>
+  </form>
+</main>

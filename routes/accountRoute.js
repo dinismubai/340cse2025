@@ -1,25 +1,27 @@
-const utilities = require("../utilities/")
-const regValidate = require('../utilities/account-validation')
-const logValidate = require('../utilities/login-validation')
-const errorController = require("../controllers/errorController")
-const accountMiddleware = require('../utilities/account-middleware')
-const invController = require("../controllers/invController")
-const { checkLogin, checkAdminOrEmployee } = require("../utilities/authMiddleware")
-
 const express = require("express")
 const router = new express.Router()
+
+const utilities = require("../utilities/")
+const regValidate = require('../utilities/account-validation')
+const accountValidate = require('../utilities/account-validation')
+const logValidate = require('../utilities/login-validation')
+const errorController = require("../controllers/errorController")
+const invController = require("../controllers/invController")
 const accountController = require("../controllers/accountController")
 
-// Views
+const { checkLogin, enrichAccountData } = require("../utilities/account-middleware")
+const { checkAdminOrEmployee } = require("../utilities/authMiddleware")
+
+// Public views
 router.get("/login", accountController.buildLogin)
 router.get("/register", accountController.buildRegister)
 
 // Registration processing
 router.post(
   "/register",
-  regValidate.registationRules(),
-  regValidate.checkRegData,
-  utilities.handleErrors(accountController.registerAccount)
+  accountValidate.registrationRules(),
+  accountValidate.checkRegistrationData,
+  accountController.registerAccount
 )
 
 // Login processing
@@ -30,16 +32,52 @@ router.post(
   accountController.loginAccount
 )
 
+// Logout
+router.get("/logout", accountController.logoutAccount)
+
 // Error route
 router.get("/trigger-error", errorController.throwError)
 
-//Logout route
-router.get("/logout", accountController.logoutAccount)
+// Authenticated route with enriched data
+router.get("/", checkLogin, enrichAccountData, (req, res, next) => {
+  const accountType = res.locals.accountData.account_type
+  if (accountType === 'Admin' || accountType === 'Employee') {
+    return invController.buildManagementView(req, res, next)
+  }
+  return accountController.buildAccountManagement(req, res, next)
+})
 
+// Update account form (with enriched account data if needed)
+router.get("/update/:accountId", checkLogin, enrichAccountData, accountController.buildUpdateAccountForm)
 
-router.get("/", utilities.checkLogin, accountController.buildAccountManagement)
+// Update account processing
+router.post(
+  "/update",
+  checkLogin,
+  accountValidate.updateAccountRules(),
+  accountValidate.checkUpdateAccountData,
+  accountController.updateAccount
+)
 
-// Admin or Employee routes
-router.get("/", checkLogin, checkAdminOrEmployee, invController.buildManagementView)
+// View para editar conta (protege com autenticação)
+router.get("/edit/:accountId", checkLogin, accountController.buildEditAccountView)
+
+// Submeter info da conta (protege)
+router.post(
+  "/update-info",
+  checkLogin,
+  accountValidate.updateAccountRules(),
+  accountValidate.checkUpdateAccountData,
+  accountController.updateAccountInfo
+)
+
+// Submeter nova password (protege)
+router.post(
+  "/update-password",
+  checkLogin,
+  accountValidate.passwordOnlyRules(),
+  accountValidate.checkPasswordOnly,
+  accountController.updatePassword
+)
 
 module.exports = router

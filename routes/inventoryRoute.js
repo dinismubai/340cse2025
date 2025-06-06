@@ -5,80 +5,61 @@ const invController = require("../controllers/invController")
 const invValidate = require("../utilities/inventory-validation")
 const utilities = require("../utilities/")
 const errorController = require("../controllers/errorController")
-const { checkLogin, checkAdminOrEmployee } = require("../utilities/authMiddleware")
+const requireEmployeeOrAdmin = require("../utilities/requireEmployeeOrAdmin")
 
-// Route to build inventory by classification view
+// ❌ Rotas públicas (sem middleware)
 router.get("/type/:classificationId", invController.buildByClassificationId)
-
-// Route to get a single inventory item's details
 router.get("/detail/:inv_id", invController.buildByInventoryId)
 
-// Route to trigger an error for testing
-router.get("/trigger-error", errorController.throwError)
-
-// Route to inventory management view
-router.get("/", invController.buildManagementView)
-
-// Routes to render forms
-router.get("/add-classification", invController.buildAddClassification)
-router.get("/add-inventory", invController.buildAddInventoryForm)
-
+// 🔧 API para Ajax (ex: dropdowns)
 router.get("/getInventory/:classification_id", invController.getInventoryJSON)
 
-// Route to build the edit inventory view
-router.get(
-  "/edit/:inv_id",
-  utilities.handleErrors(invController.buildEditInventoryView)
-)
+// ✅ Área protegida (apenas Employee/Admin)
+router.get("/", requireEmployeeOrAdmin, invController.buildManagementView)
 
-// Route to process form with validation
-/*router.post(
-  "/add-inventory",
-  invValidate.inventoryRules(),
-  invValidate.checkInventoryData,
-  invController.addInventory
-)*/
-
+router.get("/add-classification", requireEmployeeOrAdmin, invController.buildAddClassification)
 router.post(
   "/add-classification",
+  requireEmployeeOrAdmin,
   invValidate.classificationRules(),
   invValidate.checkClassificationData,
   invController.addClassification
 )
 
-
-// Add new inventory
+router.get("/add-inventory", requireEmployeeOrAdmin, invController.buildAddInventoryForm)
 router.post(
   "/add-inventory",
+  requireEmployeeOrAdmin,
   invValidate.inventoryRules(),
   invValidate.checkInventoryData,
   utilities.handleErrors(invController.addInventory)
 )
 
-// Update existing inventory
+router.get(
+  "/edit/:inv_id",
+  requireEmployeeOrAdmin,
+  utilities.handleErrors(invController.buildEditInventoryView)
+)
 router.post(
-  "/update",
+  "/edit/:inv_id",
+  requireEmployeeOrAdmin,
   invValidate.inventoryRules(),
   invValidate.checkUpdateData,
   utilities.handleErrors(invController.updateInventory)
 )
 
-// Deliver the delete confirmation view
 router.get(
   "/delete/:inv_id",
+  requireEmployeeOrAdmin,
   utilities.handleErrors(invController.buildDeleteInventoryView)
 )
-
-// Process the deletion of an inventory item
 router.post(
-  "/delete",
+  "/delete/:inv_id",
+  requireEmployeeOrAdmin,
   utilities.handleErrors(invController.deleteInventory)
 )
 
-// Admin or Employee routes
-router.get("/", checkLogin, checkAdminOrEmployee, invController.buildManagementView)
-
-
+// Para teste de erro
+router.get("/trigger-error", errorController.throwError)
 
 module.exports = router
-

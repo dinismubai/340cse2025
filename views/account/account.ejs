@@ -1,12 +1,24 @@
-
+<main id="account-management-main">
   <h1>Account Management</h1>
 
+  <!-- Greeting based on account type -->
+  <% if (account && account.account_firstname) { %>
+    <h2>Welcome <%= account.account_firstname %></h2>
+  <% } %>
+
+  <!-- Update account information link (available to all account types) -->
+  <% if (account && account.account_id) { %>
+    <p><a href="/account/update/<%= account.account_id %>">Update Account Information</a></p>
+  <% } %>
+
+  <!-- Inventory Management section (ONLY for Employee or Admin) -->
+  <% if (account && (account.account_type === 'Employee' || account.account_type === 'Admin')) { %>
+    <h3>Inventory Management</h3>
+    <p><a href="/inv">Go to Inventory Management</a></p>
+  <% } %>
+
+  <!-- Flash messages (optional) -->
   <% if (message && message.length > 0) { %>
     <div class="flash-message"><%= message %></div>
   <% } %>
-
-  <% if (errors) { %>
-    <div class="error-message"><%= errors %></div>
-  <% } %>
-
-  <p>You're logged in.</p>
+</main>

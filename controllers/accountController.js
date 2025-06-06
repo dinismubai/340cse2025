@@ -120,7 +120,7 @@ async function loginAccount(req, res) {
       if (accountData.account_type === 'Employee' || accountData.account_type === 'Admin') {
         return res.redirect('/inv/')
       } else {
-        return res.redirect('/account/')
+        return res.redirect('/account')
       }
     } else {
       req.flash("notice", "Please check your credentials and try again.")
@@ -166,13 +166,244 @@ function logoutAccount(req, res) {
  *******************************/
 async function buildAccountManagement(req, res) {
   const nav = await utilities.getNav()
-  res.render("account/account", {
+  res.render("/account", {
     title: "Account Management",
     nav,
     message: req.flash("notice"),
     errors: null,
   })
 }
+
+// Mostra o formulário com os dados atuais
+async function buildUpdateAccountForm(req, res, next) {
+  const accountId = req.params.accountId
+  const accountData = await accountModel.getAccountById(accountId)
+  const nav = await utilities.getNav()
+
+  res.render("account/edit-account", {
+    title: "Update Account",
+    nav,
+    account: accountData,
+    errors: []  // <-- garante que errors está definido
+  })
+}
+
+// Processa o envio do formulário de atualização
+async function updateAccount(req, res) {
+  const { account_id, account_firstname, account_lastname, account_email, account_password } = req.body
+  const hashedPassword = account_password ? await bcrypt.hash(account_password, 10) : null
+
+  const updateResult = await accountModel.updateAccount({
+    account_id,
+    account_firstname,
+    account_lastname,
+    account_email,
+    account_password: hashedPassword
+  })
+
+  if (updateResult) {
+    req.flash("notice", "Account updated successfully.")
+    req.session.account.account_firstname = account_firstname
+    res.redirect("/account")
+  } else {
+    const nav = await utilities.getNav()
+    req.flash("notice", "Update failed.")
+    res.status(500).render("account/edit-account", {
+      title: "Update Account",
+      nav,
+      account: req.body
+    })
+  }
+}
+
+// View de edição de conta
+async function buildEditAccountView(req, res) {
+  const nav = await utilities.getNav()
+  const accountId = req.params.accountId
+  const accountData = await accountModel.getAccountById(accountId)
+
+  res.render("account/edit-account", {
+    title: "Edit Account",
+    nav,
+    message: req.flash("notice"),
+    errors: null,
+    account: accountData
+  })
+}
+
+// Atualizar info da conta (sem password)
+async function updateAccountInfo(req, res) {
+  const nav = await utilities.getNav()
+  const { account_id, account_firstname, account_lastname, account_email } = req.body
+
+  const updateResult = await accountModel.updateAccount({
+    account_id,
+    account_firstname,
+    account_lastname,
+    account_email
+  })
+
+  if (updateResult) {
+    req.flash("notice", "Account info updated successfully.")
+    req.session.account.account_firstname = account_firstname
+    res.redirect("/account")
+  } else {
+    req.flash("notice", "Update failed.")
+    res.status(500).render("account/edit-account", {
+      title: "Edit Account",
+      nav,
+      message: req.flash("notice"),
+      errors: null,
+      account: req.body
+    })
+  }
+}
+
+// Atualizar apenas a password
+async function updatePassword(req, res) {
+  const nav = await utilities.getNav()
+  const { account_id, account_password } = req.body
+
+  try {
+    const hashedPassword = await bcrypt.hash(account_password, 10)
+    const result = await accountModel.updatePassword(account_id, hashedPassword)
+
+    if (result) {
+      req.flash("notice", "Password updated successfully.")
+      res.redirect("/account")
+    } else {
+      req.flash("notice", "Password update failed.")
+      res.status(500).render("account/edit-account", {
+        title: "Edit Account",
+        nav,
+        message: req.flash("notice"),
+        errors: null,
+        account: { account_id }
+      })
+    }
+  } catch (error) {
+    console.error("Password update error:", error)
+    req.flash("notice", "Server error.")
+    res.status(500).render("account/edit-account", {
+      title: "Edit Account",
+      nav,
+      message: req.flash("notice"),
+      errors: null,
+      account: { account_id }
+    })
+  }
+}
+
+async function buildUpdateAccountForm(req, res, next) {
+  try {
+    const accountId = req.params.accountId
+    const nav = await utilities.getNav()
+    const accountData = await accountModel.getAccountById(accountId)
+
+    if (!accountData) {
+      req.flash("notice", "Conta não encontrada.")
+      return res.redirect("/account")
+    }
+
+    res.render("account/edit-account", {
+      title: "Update Account",
+      nav,
+      account: accountData,
+      errors: [],
+      message: req.flash("notice")
+    })
+  } catch (error) {
+    console.error(error)
+    next(error)
+  }
+}
+
+
+//Processar atualização dos dados da conta
+async function updateAccount(req, res) {
+  const { account_id, account_firstname, account_lastname, account_email } = req.body
+  const nav = await utilities.getNav()
+
+  try {
+    // Verificar se email já está em uso por outro utilizador
+    const existingAccount = await accountModel.getAccountByEmail(account_email)
+    if (existingAccount && existingAccount.account_id !== parseInt(account_id)) {
+      const accountData = await accountModel.getAccountById(account_id)
+      req.flash("notice", "Este email já está em uso por outro utilizador.")
+      return res.status(409).render("account/edit-account", {
+        title: "Update Account",
+        nav,
+        account: accountData,
+        errors: [],
+        message: req.flash("notice"),
+      })
+    }
+
+    const updateResult = await accountModel.updateAccount({ account_id, account_firstname, account_lastname, account_email })
+
+    if (updateResult) {
+      const accountData = await accountModel.getAccountById(account_id)
+      req.session.account = accountData
+      req.flash("notice", "Conta atualizada com sucesso.")
+      return res.render("/account", {
+        title: "Account Management",
+        nav,
+        account: accountData,
+        message: req.flash("notice"),
+        errors: []
+      })
+    } else {
+      throw new Error("Falha na atualização da conta.")
+    }
+  } catch (error) {
+    console.error(error)
+    const accountData = await accountModel.getAccountById(account_id)
+    res.status(500).render("account/edit-account", {
+      title: "Update Account",
+      nav,
+      account: accountData,
+      errors: [{ msg: "Erro ao atualizar a conta. Tente novamente." }],
+      message: null
+    })
+  }
+}
+
+//Processar atualização da password
+async function updatePassword(req, res) {
+  const { account_id, account_password } = req.body
+  const nav = await utilities.getNav()
+
+  try {
+    const hashedPassword = await bcrypt.hash(account_password, 10)
+    const result = await accountModel.updatePassword(account_id, hashedPassword)
+
+    if (result) {
+      const accountData = await accountModel.getAccountById(account_id)
+      req.session.account = accountData
+      req.flash("notice", "Password atualizada com sucesso.")
+      return res.render("/account", {
+        title: "Account Management",
+        nav,
+        account: accountData,
+        message: req.flash("notice"),
+        errors: []
+      })
+    } else {
+      throw new Error("Falha na atualização da password.")
+    }
+  } catch (error) {
+    console.error(error)
+    const accountData = await accountModel.getAccountById(account_id)
+    res.status(500).render("account/edit-account", {
+      title: "Update Account",
+      nav,
+      account: accountData,
+      errors: [{ msg: "Erro ao atualizar a password. Tente novamente." }],
+      message: null
+    })
+  }
+}
+
 
 
 
@@ -184,4 +415,9 @@ module.exports = {
   loginAccount,
   buildAccountManagement,
   logoutAccount,
+  buildUpdateAccountForm,
+  updateAccount,
+  buildEditAccountView,
+  updateAccountInfo,
+  updatePassword,
 }

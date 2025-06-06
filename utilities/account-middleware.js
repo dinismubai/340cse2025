@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken")
+const accountModel = require("../models/account-model")
 
 function checkLogin(req, res, next) {
   const token = req.cookies.jwt
@@ -18,4 +19,18 @@ function checkLogin(req, res, next) {
   }
 }
 
-module.exports = { checkLogin }
+async function enrichAccountData(req, res, next) {
+  try {
+    if (res.locals.accountData && res.locals.accountData.account_id) {
+      const fullAccountData = await accountModel.getAccountById(res.locals.accountData.account_id)
+      if (fullAccountData) {
+        res.locals.accountData = fullAccountData
+      }
+    }
+    next()
+  } catch (error) {
+    next(error)
+  }
+}
+
+module.exports = { checkLogin, enrichAccountData }
