@@ -68,7 +68,7 @@ router.post(
   checkLogin,
   accountValidate.updateAccountRules(),
   accountValidate.checkUpdateAccountData,
-  accountController.updateAccountInfo
+  accountController.updateAccount
 )
 
 // Submeter nova password (protege)

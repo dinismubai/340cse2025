@@ -166,54 +166,12 @@ function logoutAccount(req, res) {
  *******************************/
 async function buildAccountManagement(req, res) {
   const nav = await utilities.getNav()
-  res.render("/account", {
+  res.render("account/account", {
     title: "Account Management",
     nav,
     message: req.flash("notice"),
     errors: null,
   })
-}
-
-// Mostra o formulário com os dados atuais
-async function buildUpdateAccountForm(req, res, next) {
-  const accountId = req.params.accountId
-  const accountData = await accountModel.getAccountById(accountId)
-  const nav = await utilities.getNav()
-
-  res.render("account/edit-account", {
-    title: "Update Account",
-    nav,
-    account: accountData,
-    errors: []  // <-- garante que errors está definido
-  })
-}
-
-// Processa o envio do formulário de atualização
-async function updateAccount(req, res) {
-  const { account_id, account_firstname, account_lastname, account_email, account_password } = req.body
-  const hashedPassword = account_password ? await bcrypt.hash(account_password, 10) : null
-
-  const updateResult = await accountModel.updateAccount({
-    account_id,
-    account_firstname,
-    account_lastname,
-    account_email,
-    account_password: hashedPassword
-  })
-
-  if (updateResult) {
-    req.flash("notice", "Account updated successfully.")
-    req.session.account.account_firstname = account_firstname
-    res.redirect("/account")
-  } else {
-    const nav = await utilities.getNav()
-    req.flash("notice", "Update failed.")
-    res.status(500).render("account/edit-account", {
-      title: "Update Account",
-      nav,
-      account: req.body
-    })
-  }
 }
 
 // View de edição de conta
@@ -231,68 +189,6 @@ async function buildEditAccountView(req, res) {
   })
 }
 
-// Atualizar info da conta (sem password)
-async function updateAccountInfo(req, res) {
-  const nav = await utilities.getNav()
-  const { account_id, account_firstname, account_lastname, account_email } = req.body
-
-  const updateResult = await accountModel.updateAccount({
-    account_id,
-    account_firstname,
-    account_lastname,
-    account_email
-  })
-
-  if (updateResult) {
-    req.flash("notice", "Account info updated successfully.")
-    req.session.account.account_firstname = account_firstname
-    res.redirect("/account")
-  } else {
-    req.flash("notice", "Update failed.")
-    res.status(500).render("account/edit-account", {
-      title: "Edit Account",
-      nav,
-      message: req.flash("notice"),
-      errors: null,
-      account: req.body
-    })
-  }
-}
-
-// Atualizar apenas a password
-async function updatePassword(req, res) {
-  const nav = await utilities.getNav()
-  const { account_id, account_password } = req.body
-
-  try {
-    const hashedPassword = await bcrypt.hash(account_password, 10)
-    const result = await accountModel.updatePassword(account_id, hashedPassword)
-
-    if (result) {
-      req.flash("notice", "Password updated successfully.")
-      res.redirect("/account")
-    } else {
-      req.flash("notice", "Password update failed.")
-      res.status(500).render("account/edit-account", {
-        title: "Edit Account",
-        nav,
-        message: req.flash("notice"),
-        errors: null,
-        account: { account_id }
-      })
-    }
-  } catch (error) {
-    console.error("Password update error:", error)
-    req.flash("notice", "Server error.")
-    res.status(500).render("account/edit-account", {
-      title: "Edit Account",
-      nav,
-      message: req.flash("notice"),
-      errors: null,
-      account: { account_id }
-    })
-  }
-}
 
 async function buildUpdateAccountForm(req, res, next) {
   try {
@@ -345,7 +241,7 @@ async function updateAccount(req, res) {
       const accountData = await accountModel.getAccountById(account_id)
       req.session.account = accountData
       req.flash("notice", "Conta atualizada com sucesso.")
-      return res.render("/account", {
+      return res.render("account/account", {
         title: "Account Management",
         nav,
         account: accountData,
@@ -381,7 +277,7 @@ async function updatePassword(req, res) {
       const accountData = await accountModel.getAccountById(account_id)
       req.session.account = accountData
       req.flash("notice", "Password atualizada com sucesso.")
-      return res.render("/account", {
+      return res.render("account/account", {
         title: "Account Management",
         nav,
         account: accountData,
@@ -404,10 +300,6 @@ async function updatePassword(req, res) {
   }
 }
 
-
-
-
-
 module.exports = {
   buildLogin,
   buildRegister,
@@ -418,6 +310,5 @@ module.exports = {
   buildUpdateAccountForm,
   updateAccount,
   buildEditAccountView,
-  updateAccountInfo,
   updatePassword,
 }

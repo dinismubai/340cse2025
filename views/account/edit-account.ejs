@@ -1,10 +1,10 @@
-<main>
-  <h1>Update Account</h1>
+<main id="update-account-main">
+  <h1 id="update-account-title">Update Account</h1>
 
   <% errors = errors || []; %>  <!-- Garante que errors existe -->
 
   <% if (errors.length > 0) { %>
-    <ul class="error-list">
+    <ul id="update-account-errors" class="error-list">
       <% errors.forEach(error => { %>
         <li><%= error.msg %></li>
       <% }) %>
@@ -12,7 +12,7 @@
   <% } %>
 
   <!-- Formulário para atualizar dados da conta -->
-  <form action="/account/update" method="POST" novalidate>
+  <form id="update-account-form" action="/account/update" method="POST" novalidate>
     <input type="hidden" name="account_id" value="<%= account.account_id %>">
 
     <label for="account_firstname">First Name</label>
@@ -24,17 +24,19 @@
     <label for="account_email">Email</label>
     <input type="email" id="account_email" name="account_email" required value="<%= account.account_email %>" autocomplete="email">
 
-    <button type="submit">Update Account</button>
+    <button id="update-account-submit" type="submit">Update Account</button>
   </form>
 
-  <hr>
+  <hr id="update-account-separator">
 
   <!-- Formulário para alteração de password -->
-  <form action="/account/update-password" method="POST" novalidate>
+  <form id="update-password-form" action="/account/update-password" method="POST" novalidate>
     <input type="hidden" name="account_id" value="<%= account.account_id %>">
 
-    <p>Enter a new password to change your current password.</p>
-    <p>Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character.</p>
+    <p id="update-password-instructions">Enter a new password to change your current password.</p>
+    <p id="update-password-requirements">
+      Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character.
+    </p>
 
     <label for="account_password">New Password</label>
     <input
@@ -51,6 +53,6 @@
       Use a strong password with at least 8 characters including uppercase, lowercase, numbers and special symbols.
     </div>
 
-    <button type="submit">Change Password</button>
+    <button id="update-password-submit" type="submit">Change Password</button>
   </form>
 </main>

@@ -730,6 +730,186 @@ main h1 {
 }
 
 
+/* Container principal */
+#update-account-main {
+  max-width: 480px;
+  margin: 2rem auto;
+  padding: 2rem 2.5rem;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.05);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+}
+
+/* Título */
+#update-account-title {
+  text-align: center;
+  color: #2a587a;
+  font-weight: 700;
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Lista de erros */
+#error-list, #update-account-errors {
+  background-color: #ffe6e6;
+  border: 1px solid #e00;
+  border-radius: 6px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  list-style: inside disc;
+  color: #a00;
+  font-weight: 600;
+}
+
+/* Formulários */
+#update-account-form,
+#update-password-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  margin-bottom: 2rem;
+}
+
+/* Labels */
+#update-account-form label,
+#update-password-form label {
+  font-weight: 600;
+  color: #444;
+  margin-bottom: 0.3rem;
+}
+
+/* Inputs */
+#update-account-form input[type="text"],
+#update-account-form input[type="email"],
+#update-password-form input[type="password"] {
+  padding: 0.45rem 0.6rem;
+  font-size: 1rem;
+  border: 1.5px solid #ccc;
+  border-radius: 6px;
+  transition: border-color 0.25s ease;
+}
+
+#update-account-form input[type="text"]:focus,
+#update-account-form input[type="email"]:focus,
+#update-password-form input[type="password"]:focus {
+  border-color: #2a587a;
+  outline: none;
+  box-shadow: 0 0 5px rgba(42,88,122,0.3);
+}
+
+/* Botões */
+#update-account-submit,
+#update-password-submit {
+  background-color: #2a587a;
+  color: white;
+  font-weight: 700;
+  border: none;
+  padding: 0.7rem 1.3rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  align-self: flex-start;
+}
+
+#update-account-submit:hover,
+#update-password-submit:hover {
+  background-color: #21496a;
+}
+
+/* Separator */
+#update-account-separator {
+  margin: 2rem 0;
+  border: none;
+  border-top: 1.2px solid #ddd;
+}
+
+/* Textos de ajuda e instruções */
+#update-password-instructions,
+#update-password-requirements,
+#passwordHelp {
+  font-size: 0.85rem;
+  color: #555;
+  line-height: 1.3;
+}
+
+#passwordHelp {
+  margin-top: 0.3rem;
+  font-style: italic;
+  color: #666;
+}
+
+/* Container do formulário de eliminação */
+.delete-form {
+  max-width: 500px;
+  margin: 3rem auto;
+  padding: 2rem;
+  background-color: #fff8f8;
+  border: 1px solid #f5c6cb;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(255, 0, 0, 0.1);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Aviso de confirmação */
+.delete-form p {
+  color: #b71c1c;
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+/* Grupos de input */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+/* Rótulos */
+.form-group label {
+  font-weight: bold;
+  margin-bottom: 0.3rem;
+  color: #444;
+}
+
+/* Campos de texto somente leitura */
+.form-group input[readonly] {
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  padding: 0.6rem;
+  font-size: 1rem;
+  border-radius: 6px;
+  color: #333;
+}
+
+/* Botão de eliminação */
+.delete-form button[type="submit"] {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #d32f2f;
+  color: #fff;
+  font-weight: bold;
+  font-size: 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.delete-form button[type="submit"]:hover {
+  background-color: #b71c1c;
+}
+
+/* Campo hidden - opcional esconder explicitamente */
+.delete-form input[type="hidden"] {
+  display: none;
+}
+
+
+
 
 /******************************************************************LARGE SCREENS*************************************************************/
 @media screen and (min-width: 768px) {
