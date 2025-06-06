@@ -5,6 +5,7 @@ const invController = require("../controllers/invController")
 const invValidate = require("../utilities/inventory-validation")
 const utilities = require("../utilities/")
 const errorController = require("../controllers/errorController")
+const { checkLogin, checkAdminOrEmployee } = require("../utilities/authMiddleware")
 
 // Route to build inventory by classification view
 router.get("/type/:classificationId", invController.buildByClassificationId)
@@ -73,6 +74,10 @@ router.post(
   "/delete",
   utilities.handleErrors(invController.deleteInventory)
 )
+
+// Admin or Employee routes
+router.get("/", checkLogin, checkAdminOrEmployee, invController.buildManagementView)
+
 
 
 module.exports = router

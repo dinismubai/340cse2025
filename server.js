@@ -22,6 +22,7 @@ const accountRoute = require("./routes/accountRoute")
 const registerRoute = require("./routes/registerRoute")
 const bodyParser = require("body-parser")
 const cookieParser = require("cookie-parser")
+const sessionAccountMiddleware = require("./utilities/sessionMiddleware")
 
 
 
@@ -41,6 +42,11 @@ const cookieParser = require("cookie-parser")
   saveUninitialized: true,
   name: 'sessionId',
 }))
+
+app.use((req, res, next) => {
+  res.locals.account = req.session.account || null;
+  next();
+});
 
 // Express Messages Middleware
 app.use(require('connect-flash')())
@@ -99,6 +105,15 @@ app.use(async (err, req, res, next) => {
   })
 })
 
+const { addAccountToLocals } = require("./utilities/authMiddleware")
+
+app.use(addAccountToLocals)
+
+
+
+//Session Middleware
+app.use(sessionAccountMiddleware)
+
 /* ***********************
  * Local Server Information
  * Values from .env (environment) file
@@ -112,3 +127,5 @@ const host = process.env.HOST
 app.listen(port, () => {
   console.log(`app listening on ${host}:${port}`)
 })
+
+

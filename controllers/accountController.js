@@ -80,92 +80,51 @@ async function registerAccount(req, res) {
   }
 }
 
-/*******************************
- * Login Account
- *******************************/
-/*async function loginAccount(req, res) {
-  let nav = await utilities.getNav()
-  const { account_email, account_password } = req.body
-
-  try {
-    // 1. Obtém conta pelo email
-    const accountData = await accountModel.getAccountByEmail(account_email)
-
-    if (!accountData) {
-      req.flash("notice", "No account found with the provided email.")
-      return res.status(400).render("account/login", {
-        title: "Login",
-        nav,
-        message: req.flash("notice"),
-        account_email,
-      })
-    }
-
-    // 2. Compara password com hash guardado
-    const isMatch = await bcrypt.compare(account_password, accountData.account_password)
-
-    if (isMatch) {
-      // Aqui podes adicionar criação de sessão, JWT, etc. se necessário
-      req.flash("notice", `Wellcome back, ${accountData.account_firstname}!`)
-      return res.status(200).render("account/login", {
-        title: "Login",
-        nav,
-        message: req.flash("notice"),
-        account_email,
-      })
-    } else {
-      req.flash("notice", "Incorrect password.")
-      return res.status(401).render("account/login", {
-        title: "Login",
-        nav,
-        message: req.flash("notice"),
-        account_email,
-      })
-    }
-  } catch (error) {
-    console.error("Login Error:", error)
-    req.flash("notice", "Something went wrong. Please try again.")
-    return res.status(500).render("account/login", {
-      title: "Login",
-      nav,
-      message: req.flash("notice"),
-      account_email,
-    })
-  }
-}*/
-
-/* ****************************************
- *  Process login request
- * ************************************ */
+//Login Account
 async function loginAccount(req, res) {
   let nav = await utilities.getNav()
   const { account_email, account_password } = req.body
   const accountData = await accountModel.getAccountByEmail(account_email)
+
   if (!accountData) {
     req.flash("notice", "Please check your credentials and try again.")
-    res.status(400).render("account/login", {
+    return res.status(400).render("account/login", {
       title: "Login",
       nav,
       errors: null,
       message: req.flash("notice"),
       account_email,
     })
-    return
   }
+
   try {
-    if (await bcrypt.compare(account_password, accountData.account_password)) {
+    const passwordMatches = await bcrypt.compare(account_password, accountData.account_password)
+
+    if (passwordMatches) {
+      // Segurança: não guardar password
       delete accountData.account_password
+
+      // Guardar dados na sessão
+      req.session.account = accountData
+
+      // JWT opcional
       const accessToken = jwt.sign(accountData, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 3600 * 1000 })
-      if(process.env.NODE_ENV === 'development') {
-        res.cookie("jwt", accessToken, { httpOnly: true, maxAge: 3600 * 1000 })
-      } else {
-        res.cookie("jwt", accessToken, { httpOnly: true, secure: true, maxAge: 3600 * 1000 })
+      const cookieOptions = {
+        httpOnly: true,
+        maxAge: 3600 * 1000,
+        secure: process.env.NODE_ENV !== 'development'
       }
-      return res.redirect("/account/")
-    }
-    else {
-      req.flash("message notice", "Please check your credentials and try again.")
-      res.status(400).render("account/login", {
+      res.cookie("jwt", accessToken, cookieOptions)
+
+      // Redirecionamento baseado no tipo
+      if (accountData.account_type === 'Employee' || accountData.account_type === 'Admin') {
+        return res.redirect('/inv/')
+      } else {
+        return res.redirect('/account/')
+      }
+    } else {
+      req.flash("notice", "Please check your credentials and try again.")
+      return res.status(400).render("account/login", {
         title: "Login",
         nav,
         errors: null,
@@ -174,9 +133,33 @@ async function loginAccount(req, res) {
       })
     }
   } catch (error) {
-    throw new Error('Access Forbidden')
+    console.error("Login error:", error)
+    req.flash("notice", "Something went wrong. Try again.")
+    return res.status(500).render("account/login", {
+      title: "Login",
+      nav,
+      errors: null,
+      message: req.flash("notice"),
+      account_email,
+    })
   }
 }
+
+//Account logout
+function logoutAccount(req, res) {
+  req.session.destroy((err) => {
+    if (err) {
+      console.error("Logout error:", err)
+      req.flash("notice", "Logout failed. Please try again.")
+      return res.redirect("/account")
+    }
+    res.clearCookie("connect.sid") // limpa cookie da sessão
+    res.clearCookie("jwt")         // limpa JWT se quiseres
+    res.redirect("/")
+  })
+}
+
+
 
 /*******************************
  * Build Account Management View
@@ -200,4 +183,5 @@ module.exports = {
   registerAccount,
   loginAccount,
   buildAccountManagement,
+  logoutAccount,
 }
