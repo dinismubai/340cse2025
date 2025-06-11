@@ -23,6 +23,8 @@ const registerRoute = require("./routes/registerRoute")
 const bodyParser = require("body-parser")
 const cookieParser = require("cookie-parser")
 const sessionAccountMiddleware = require("./utilities/sessionMiddleware")
+const cartRoute = require("./routes/cartRoute");
+
 
 
 
@@ -127,3 +129,9 @@ const host = process.env.HOST
 app.listen(port, () => {
   console.log(`app listening on ${host}:${port}`)
 })
+
+/**************Cart Routes**************/
+app.use("/cart", cartRoute);
+
+
+

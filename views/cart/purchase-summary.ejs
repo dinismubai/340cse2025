@@ -1,0 +1,25 @@
+<div id="purchase-summary">
+  <h2>Resumo da Compra</h2>
+  <table>
+    <tr>
+      <th>Nome</th>
+      <th>Email</th>
+      <th>Classificação</th>
+      <th>Modelo</th>
+      <th>Quantidade</th>
+      <th>Preço</th>
+    </tr>
+    <% cartItems.forEach(item => { %>
+      <tr>
+        <td><%= item.account_firstname %></td>
+        <td><%= item.account_email %></td>
+        <td><%= item.classification_name %></td>
+        <td><%= item.inv_model %></td>
+        <td><%= item.cart_quantity %></td>
+        <td>€<%= (item.cart_quantity * item.inv_price).toFixed(2) %></td>
+      </tr>
+    <% }) %>
+  </table>
+
+  <h3>Total a pagar: €<%= total.toFixed(2) %></h3>
+</div>

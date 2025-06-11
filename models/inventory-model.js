@@ -36,6 +36,26 @@ async function getInventoryById(inv_id) {
     console.error("getInventoryById error " + error)
   }
 }
+async function getInventoryById_toPurchase(inv_id) {
+  try {
+    const sql = `
+      SELECT 
+        i.inv_id, i.inv_make, i.inv_model, i.inv_year, 
+        i.inv_description, i.inv_image, i.inv_thumbnail, 
+        i.inv_price, i.inv_miles, i.inv_color, 
+        i.classification_id, c.classification_name
+      FROM inventory i
+      JOIN classification c ON i.classification_id = c.classification_id
+      WHERE i.inv_id = $1
+    `
+    const result = await pool.query(sql, [inv_id])
+    return result.rows[0] // devolve um único objeto, como a view espera
+  } catch (error) {
+    console.error("getInventoryById error:", error)
+    throw error
+  }
+}
+
 
 async function addClassification(classification_name) {
   try {
@@ -240,4 +260,5 @@ module.exports = {
   getInventoryItemById,
   updateInventory,
   deleteInventory,
+  getInventoryById_toPurchase,
  };

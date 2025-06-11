@@ -1,7 +1,12 @@
 <div class="vehicle-detail-container">
   <div class="vehicle-image">
-    <img src="<%= item.inv_image %>" alt="Image of <%= item.inv_make %> <%= item.inv_model %>">
-  </div>
+  <img src="<%= item.inv_image %>" alt="Image of <%= item.inv_make %> <%= item.inv_model %>">
+
+  <a href="/cart/purchase/<%= item.inv_id %>">
+    <img src="/images/site/own_today.png" alt="Click here to own today!">
+  </a>
+</div>
+
   <div class="vehicle-info">
     <h1><%= item.inv_make %> <%= item.inv_model %></h1>
     <br>
