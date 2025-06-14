@@ -1,13 +1,13 @@
 <div id="purchase-summary">
-  <h2>Resumo da Compra</h2>
+  <h2>Summary</h2>
   <table>
     <tr>
-      <th>Nome</th>
+      <th>Name</th>
       <th>Email</th>
-      <th>Classificação</th>
-      <th>Modelo</th>
-      <th>Quantidade</th>
-      <th>Preço</th>
+      <th>Classification</th>
+      <th>Model</th>
+      <th>Quantity</th>
+      <th>Price</th>
     </tr>
     <% cartItems.forEach(item => { %>
       <tr>
@@ -21,5 +21,5 @@
     <% }) %>
   </table>
 
-  <h3>Total a pagar: €<%= total.toFixed(2) %></h3>
+  <h3>Total ammount to pay: $<%= total.toFixed(2) %></h3>
 </div>

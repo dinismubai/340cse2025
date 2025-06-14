@@ -1,22 +1,22 @@
 <div id="purchase-form">
-  <h2>Comprar Veículo</h2>
+  <h2>Buy a Vehicle</h2>
   <form action="/cart/add" method="POST">
     <input type="hidden" name="inv_id" value="<%= vehicle.inv_id %>">
     <input type="hidden" name="classification_id" value="<%= vehicle.classification_id %>">
 
-    <label for="nome">Nome:</label>
+    <label for="nome">Name:</label>
     <input id="nome" type="text" value="<%= account.account_firstname %>" readonly><br>
 
-    <label for="marca">Marca:</label>
+    <label for="marca">Make:</label>
     <input id="marca" type="text" value="<%= vehicle.inv_make %>" readonly><br>
 
-    <label for="modelo">Modelo:</label>
+    <label for="modelo">Model:</label>
     <input id="modelo" type="text" value="<%= vehicle.inv_model %>" readonly><br>
 
-    <label for="classificacao">Classificação:</label>
+    <label for="classificacao">Classification:</label>
     <input id="classificacao" type="text" value="<%= vehicle.classification_name %>" readonly><br>
 
-    <label for="quantidade">Quantidade:</label>
+    <label for="quantidade">Quantity:</label>
     <input id="quantidade" type="number" name="cart_quantity" value="1" min="1" required><br>
 
     <button type="submit">Add to Cart</button>
