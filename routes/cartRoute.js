@@ -11,4 +11,4 @@ router.post("/add", cartController.addToCart);
 // Resumo da compra
 router.get("/summary/:account_id", cartController.showPurchaseSummary);
 
-module.exports = router;
+module.exports = router;//
